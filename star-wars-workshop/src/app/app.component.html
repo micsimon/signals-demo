@@ -1,0 +1,30 @@
+<h1>Star Wars Character Signal Example</h1>
+@if(characters) {
+<div class="preview-container">
+  @for(character of characters; track character) {
+  <div class="preview-card" (click)="selectCharacter(character)">
+    <img src="{{ character.image }}" alt="{{ character.name }}" />
+    <h2>{{ character.name }}</h2>
+  </div>
+  }
+</div>
+}
+<div class="gender-counts-container">
+  <p>Female Character: {{femaleCount}}</p>
+  <p>Male Character: {{maleCount}}</p>
+  <p>Robot Character: {{robotCount}}</p>
+</div>
+<button (click)="loadRandomCharacters()">Load Random Characters</button>
+@if(selectedCharacter) {
+<div class="detail-card">
+  <h3>{{ selectedCharacter.name }}</h3>
+  <img src="{{ selectedCharacter.image }}" alt="{{ selectedCharacter.name }}" />
+  <p>Height: {{ selectedCharacter.height }}</p>
+  <p>Mass: {{ selectedCharacter.mass }}</p>
+  <p>Hair Color: {{ selectedCharacter.hair_color }}</p>
+  <p>Skin Color: {{ selectedCharacter.skin_color }}</p>
+  <p>Eye Color: {{ selectedCharacter.eye_color }}</p>
+  <p>Birth Year: {{ selectedCharacter.birth_year }}</p>
+  <p>Gender: {{ selectedCharacter.gender }}</p>
+</div>
+}

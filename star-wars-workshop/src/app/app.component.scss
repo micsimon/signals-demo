@@ -1,0 +1,141 @@
+@import url("https://fonts.cdnfonts.com/css/star-jedi");
+
+html,
+body {
+  height: 100%; /* Ensure the body and html take up the full height of the viewport */
+  margin: 0;
+  padding: 0;
+  font-family: "Star Jedi", Arial, sans-serif; /* Set the default font to Star Jedi */
+  background: url("https://example.com/star-wars-background.jpg") no-repeat
+    center center fixed; /* Add a Star Wars background image */
+  background-size: cover; /* Cover the entire viewport */
+  color: #fff; /* White text for the entire application */
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Align items to the top */
+  min-height: 100vh; /* Minimum height of the viewport */
+  overflow-y: auto; /* Make the host scrollable */
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+  padding: 20px; /* Add padding to the borders of the host */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
+}
+
+h1 {
+  color: #ffe81f; /* Star Wars yellow for the headline */
+  margin-bottom: 20px; /* Space below the headline */
+  text-shadow: 2px 2px 4px #000; /* Add a shadow to the text */
+}
+
+.preview-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Space between cards */
+  flex-wrap: wrap; /* Wrap cards to the next line if they overflow */
+  margin-bottom: 20px; /* Space below the container */
+}
+
+.preview-card {
+  border: 1px solid #444;
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+  flex: 0 1 200px; /* Flex-grow, flex-shrink, and flex-basis */
+  text-align: center; /* Center the text and image */
+  background-color: #111; /* Dark background */
+  color: #fff; /* White text */
+  transition: transform 0.2s; /* Smooth hover effect */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* Add a glow effect */
+}
+
+.preview-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px; /* Optional: Add rounded corners to the image */
+}
+
+.preview-card:hover {
+  background-color: #222; /* Slightly lighter black on hover */
+  transform: scale(1.05); /* Slightly enlarge the card on hover */
+}
+
+.detail-card {
+  border: 1px solid #444;
+  padding: 20px;
+  margin: 20px;
+  background-color: #111; /* Dark background */
+  color: #fff; /* White text */
+  animation: fadeIn 0.5s ease-in-out; /* Apply fade-in animation */
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); /* Add a glow effect */
+}
+
+.detail-card.fade-out {
+  animation: fadeOut 0.5s ease-in-out; /* Apply fade-out animation */
+}
+
+button {
+  background-color: #ffe81f; /* Star Wars yellow */
+  color: #000; /* Black text */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 20px; /* Space above the button */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* Add a glow effect */
+}
+
+button:hover {
+  background-color: #ffd700; /* Slightly lighter yellow on hover */
+}
+
+.gender-counts-container {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); /* Semi-transparent white background */
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  animation: pulse 2s infinite; /* Pulsing animation */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Add a glow effect */
+}
+
+.gender-counts-container p {
+  margin: 5px 0; /* Space between paragraphs */
+  color: #fff; /* White text */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
