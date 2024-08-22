@@ -1,0 +1,22 @@
+<button (click)="loadFilms()">Load movies</button>
+<button (click)="loadRatings()">Load ratings</button>
+<div class="card-grid">
+  @for (movie of films; track movie.id) {
+    <app-film-card
+      [film]="movie"
+      (ratingChange)="updateRating(movie.id, $event)"
+      (selected)="setSelectedFilm($event)"
+    ></app-film-card>
+  }
+  <!--  @if (movies.length === 0 && !loading) {-->
+  <!--    <p class="text-lg">Sorry, no movies found.</p>-->
+  <!--  }-->
+</div>
+
+@if (selectedFilm) {
+  <app-film-details [film]="selectedFilm">
+
+  </app-film-details>
+}
+
+<app-log-display></app-log-display>
