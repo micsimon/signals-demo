@@ -1,16 +1,40 @@
-import {Component, Input} from '@angular/core';
-import {BlinkDirective} from '../blink.directive';
-import {Film} from '../workshop-demo/workshop-demo.component';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {BlinkableComponent} from '../blinkable.component';
+import {Film} from '../models';
 
 @Component({
   selector: 'app-film-details',
   standalone: true,
-  imports: [],
+             imports: [
+               ReactiveFormsModule
+             ],
   templateUrl: './film-details.component.html',
   styleUrl: './film-details.component.scss',
-             hostDirectives: [BlinkDirective]
 })
-export class FilmDetailsComponent {
-  @Input() film!: Film;
+export class FilmDetailsComponent extends BlinkableComponent {
+  @Output() ratingChange: EventEmitter<number> = new EventEmitter<number>();
+  protected fc: FormControl = new FormControl();
+
+  constructor() {
+    super();
+    this.fc.valueChanges.pipe(
+      takeUntilDestroyed(),
+    ).subscribe((value) => {
+      this.ratingChange.emit(value);
+    });
+  }
+
+  private _film!: Film;
+
+  public get film(): Film {
+    return this._film;
+  }
+
+  @Input() set film(value: Film) {
+    this._film = value;
+    this.fc.setValue(value.rating);
+  }
 
 }

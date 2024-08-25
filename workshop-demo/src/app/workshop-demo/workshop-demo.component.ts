@@ -1,11 +1,13 @@
 import {AsyncPipe, JsonPipe} from '@angular/common';
-import {HttpClient} from '@angular/common/http';
 import {Component, inject} from '@angular/core';
-import {BlinkDirective} from '../blink.directive';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {BlinkableComponent} from '../blinkable.component';
 import {FilmCardComponent} from '../film-card/film-card.component';
 import {FilmDetailsComponent} from '../film-details/film-details.component';
+import {FilmService} from '../film.service';
 import {LogDisplayComponent} from '../log-display/log-display.component';
 import {LogService} from '../log.service';
+import {Film} from '../models';
 import {RatingService} from '../rating.service';
 
 @Component({
@@ -20,40 +22,45 @@ import {RatingService} from '../rating.service';
              ],
              templateUrl: './workshop-demo.component.html',
              styleUrl: './workshop-demo.component.scss',
-             hostDirectives: [BlinkDirective]
            })
-export class WorkshopDemoComponent {
+export class WorkshopDemoComponent extends BlinkableComponent {
 
-  private _httpClient: HttpClient = inject(HttpClient);
   private _logService: LogService = inject(LogService);
-
-  // protected movies$ = this._httpClient.get('http://swapi.dev/api/films');
   private _ratingService: RatingService = inject(RatingService);
+  protected films: Film[] = [];
 
   protected selectedFilm: Film | null = null;
-  protected films: any[] = [];
-  protected ratings: any = {};
-  protected fimsWithRatings: any[] = [];
+  protected ratings: { [key: string]: number } = {};
+  private _filmService: FilmService = inject(FilmService);
+
+  constructor() {
+    super();
+    this._ratingService.ratings$.pipe(
+      takeUntilDestroyed()
+    ).subscribe((ratings) => {
+      this.ratings = ratings;
+      this.applyRatings();
+    });
+  }
 
   public loadFilms(): void {
-    this._httpClient.get<Response<Film>>('http://swapi.dev/api/films').subscribe((response: Response<Film>) => {
-      this.films = response.results;
+    this._filmService.getFilms().subscribe((films: Film[]) => {
+      this.films = films;
+      this.applyRatings();
     });
   }
 
-  public loadRatings(): void {
-    this._ratingService.getRatings().subscribe((ratings) => {
-      this.films = this.films.map((film) => {
-        return {
-          ...film,
-          rating: ratings[film.url]
-        }
-      });
+  public applyRatings() {
+    this.films = this.films.map((film) => {
+      return {
+        ...film,
+        rating: this.ratings[film.url]
+      }
     });
   }
 
-  public updateRating(id: any, $event: any): void {
-
+  public updateRating($event: any): void {
+    this._ratingService.updateRating(this.selectedFilm?.url as string, $event);
   }
 
   public setSelectedFilm($event: Film | null): void {
@@ -62,12 +69,3 @@ export class WorkshopDemoComponent {
   }
 }
 
-interface Response<T> {
-  count: number;
-  results: T[];
-}
-
-export interface Film {
-  title: string;
-  rating?: number;
-}

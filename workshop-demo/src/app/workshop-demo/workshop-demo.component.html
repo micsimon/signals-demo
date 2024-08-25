@@ -1,22 +1,23 @@
-<button (click)="loadFilms()">Load movies</button>
-<button (click)="loadRatings()">Load ratings</button>
-<div class="card-grid">
-  @for (movie of films; track movie.id) {
+<div class="header">
+  <button (click)="loadFilms()">Load movies</button>
+</div>
+
+<div class="film-list">
+  @for (film of films; track film.url) {
     <app-film-card
-      [film]="movie"
-      (ratingChange)="updateRating(movie.id, $event)"
+      [film]="film"
       (selected)="setSelectedFilm($event)"
     ></app-film-card>
   }
-  <!--  @if (movies.length === 0 && !loading) {-->
-  <!--    <p class="text-lg">Sorry, no movies found.</p>-->
-  <!--  }-->
 </div>
 
 @if (selectedFilm) {
-  <app-film-details [film]="selectedFilm">
-
+  <app-film-details
+    [film]="selectedFilm"
+    (ratingChange)="updateRating($event)"
+  >
   </app-film-details>
 }
 
 <app-log-display></app-log-display>
+{{ blink() }}

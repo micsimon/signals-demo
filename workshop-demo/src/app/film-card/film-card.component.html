@@ -1,1 +1,2 @@
-{{film?.title}} {{film?.rating}} <button (click)="selected.emit(film)">View Details</button>
+<span>{{film.title}} ({{film.rating ?? ' '}})</span> <button (click)="selected.emit(film)">View Details</button>
+{{blink()}}

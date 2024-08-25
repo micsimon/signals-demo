@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {BlinkDirective} from '../blink.directive';
-import {Film} from '../workshop-demo/workshop-demo.component';
+import {BlinkableComponent} from '../blinkable.component';
+import {Film} from '../models';
 
 @Component({
              selector: 'app-film-card',
@@ -8,11 +8,8 @@ import {Film} from '../workshop-demo/workshop-demo.component';
              imports: [],
              templateUrl: './film-card.component.html',
              styleUrl: './film-card.component.scss',
-             hostDirectives: [BlinkDirective]
            })
-export class FilmCardComponent {
+export class FilmCardComponent extends BlinkableComponent {
   @Input() film!: Film;
-  @Output() ratingChange = new EventEmitter<unknown>();
   @Output() selected = new EventEmitter<Film | null>();
-
 }

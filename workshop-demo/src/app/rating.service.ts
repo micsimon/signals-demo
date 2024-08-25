@@ -1,15 +1,20 @@
 import {Injectable} from '@angular/core';
-import {delay, Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class RatingService {
 
-  getRatings(): Observable<{ [key: string]: number }> {
-    return of({
-                'https://swapi.dev/api/films/1/': 5,
-              }).pipe(
-      delay(1000)
-    )
+  private ratingsSubject: BehaviorSubject<{ [key: string]: number }> = new BehaviorSubject<{ [p: string]: number }>({});
+  public ratings$: Observable<{ [key: string]: number }> = this.ratingsSubject.asObservable();
 
+  constructor() {
+    localStorage.getItem('ratings') ? this.ratingsSubject.next(JSON.parse(localStorage.getItem('ratings') as string)) : this.ratingsSubject.next({});
+  }
+
+  public updateRating(filmUrl: string, rating: number): void {
+    const ratings = this.ratingsSubject.getValue();
+    ratings[filmUrl] = rating;
+    this.ratingsSubject.next(ratings);
+    localStorage.setItem('ratings', JSON.stringify(ratings));
   }
 }

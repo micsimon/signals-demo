@@ -1,16 +1,24 @@
 import {Directive, DoCheck, ElementRef, inject} from '@angular/core';
+import {BlinkService} from './blink.service';
 
-@Directive({
-             selector: '[appBlink]',
-             standalone: true
-           })
-export class BlinkDirective implements DoCheck {
+@Directive()
+export class BlinkableComponent implements DoCheck{
   public elementRef: ElementRef = inject(ElementRef);
+  public blinkService: BlinkService = inject(BlinkService);
 
   private color: string = this.getRandomColor();
 
-  ngDoCheck(): void {
+  public ngDoCheck(): void {
+  }
+
+  public blink(){
+    if(!this.blinkService.showBlink) {
+      return;
+    }
     (this.elementRef.nativeElement as HTMLElement).animate([
+                                                             {backgroundColor: this.color},
+                                                             {backgroundColor: this.color},
+                                                             {backgroundColor: this.color},
                                                              {backgroundColor: this.color},
                                                              {backgroundColor: "white"},
                                                            ], {
@@ -26,5 +34,4 @@ export class BlinkDirective implements DoCheck {
     }
     return color;
   }
-
 }

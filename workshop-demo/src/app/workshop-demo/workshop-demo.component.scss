@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: solid 1px black;
+  padding: 8px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 8px;
+
+}
+
+.film-list {
+  display: grid;
+  grid-template-columns: auto 100px;
+  gap: 8px;
+  padding: 8px;
+  app-film-card{
+    grid-column: 1 / -1;
+  }
+}

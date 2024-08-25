@@ -1,1 +1,5 @@
-{{logService.messages | json}}
+@for (message of logService.messages$  | async; track message) {
+  <p>{{message}}</p>
+}
+
+{{blink()}}
