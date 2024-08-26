@@ -27,11 +27,11 @@ export class WorkshopDemoComponent extends BlinkableComponent {
 
   private _logService: LogService = inject(LogService);
   private _ratingService: RatingService = inject(RatingService);
-  protected films: Film[] = [];
+  private _filmService: FilmService = inject(FilmService);
 
   protected selectedFilm: Film | null = null;
   protected ratings: { [key: string]: number } = {};
-  private _filmService: FilmService = inject(FilmService);
+  protected films: Film[] = [];
 
   constructor() {
     super();
