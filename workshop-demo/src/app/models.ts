@@ -9,3 +9,6 @@ export interface Film {
   rating?: number;
 }
 
+export interface Rating {
+  [key: string]: number
+}

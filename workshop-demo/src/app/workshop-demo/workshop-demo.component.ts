@@ -7,7 +7,7 @@ import {FilmDetailsComponent} from '../film-details/film-details.component';
 import {FilmService} from '../film.service';
 import {LogDisplayComponent} from '../log-display/log-display.component';
 import {LogService} from '../log.service';
-import {Film} from '../models';
+import {Film, Rating} from '../models';
 import {RatingService} from '../rating.service';
 
 @Component({
@@ -30,7 +30,7 @@ export class WorkshopDemoComponent extends BlinkableComponent {
   private _filmService: FilmService = inject(FilmService);
 
   protected selectedFilm: Film | null = null;
-  protected ratings: { [key: string]: number } = {};
+  protected ratings: Rating = {};
   protected films: Film[] = [];
 
   constructor() {
