@@ -8,29 +8,32 @@ import {Component, computed, effect, Signal, signal, WritableSignal} from '@angu
              styleUrl: './demo.component.scss'
            })
 export class DemoComponent {
+  protected name: WritableSignal<string> = signal('John Doe');
+  protected begruessung: Signal<string> = computed(() => `Hallo, ${this.name()}`);
   constructor() {
-    // Signal erstellen
-    const name: WritableSignal<string> = signal('Moritz');
-    const nachName: WritableSignal<string> = signal('Schulze');
-    // Setzen über set-Methode
-    name.set('Hagen');
-    // Setzen über update-Methode
-    name.update((currentValue: string) => 'Thomas');
-    // Lesen
-    console.log(name());
+    this.name.set('Jane Doe');
+    this.name.update((name) => name.toUpperCase());
+    console.log(this.name());
 
-    // Computed erstellen
-    const begruessung: Signal<string> = computed(() => {
-      return `Hallo ${name()} ${nachName()}!`
-    });
+    this.begruessung= computed(() =>{
+      console.log('Begruessung wird berechnet');
+      return `Hallo, ${this.name()}`}
+    );
+    setTimeout(()=>{
+      this.name.set('Max Mustermann');
+    }, 3000);
 
-    // Effect erstellen
+    const vorname = signal('Max');
+    const nachname = signal('Mustermann');
+
     effect(() => {
-      console.log(begruessung())
+      console.log('Begruessung hat sich geändert', `Hallo, ${vorname()} ${nachname()}`);
     });
 
-    name.set('Hagen');
-    nachName.set('Strahl');
-
+    console.log('vorher');
+    vorname.set('John');
+    console.log('dazwischen');
+    nachname.set('Doe');
+    console.log('danach');
   }
 }

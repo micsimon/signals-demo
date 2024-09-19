@@ -13,7 +13,7 @@ export class RatingService {
   }
 
   public updateRating(filmUrl: string, rating: number): void {
-    const ratings = this.ratingsSubject.getValue();
+    const ratings = {...this.ratingsSubject.getValue()};
     ratings[filmUrl] = rating;
     this.ratingsSubject.next(ratings);
     localStorage.setItem('ratings', JSON.stringify(ratings));

@@ -3,21 +3,25 @@
 </div>
 
 <div class="film-list">
-  @for (film of films; track film.url) {
+  @for (film of films(); track film.url) {
     <app-film-card
       [film]="film"
+      [rating]="ratings()?.[film.url]"
       (selected)="setSelectedFilm($event)"
     ></app-film-card>
   }
 </div>
 
-@if (selectedFilm) {
+@if (selectedFilm()) {
   <app-film-details
-    [film]="selectedFilm"
+    [film]="selectedFilm()"
+    [rating]="ratings()?.[selectedFilm()?.url ?? '']"
     (ratingChange)="updateRating($event)"
   >
   </app-film-details>
 }
+
+<p>Average Rating: {{avgRating()}}</p>
 
 <app-log-display></app-log-display>
 {{ blink() }}

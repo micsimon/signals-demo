@@ -1,6 +1,7 @@
 import {AsyncPipe, JsonPipe} from '@angular/common';
-import {Component, inject} from '@angular/core';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {Component, computed, effect, inject, signal, Signal, WritableSignal} from '@angular/core';
+import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
+import {startWith} from 'rxjs';
 import {BlinkableComponent} from '../blinkable.component';
 import {FilmCardComponent} from '../film-card/film-card.component';
 import {FilmDetailsComponent} from '../film-details/film-details.component';
@@ -29,43 +30,37 @@ export class WorkshopDemoComponent extends BlinkableComponent {
   private _ratingService: RatingService = inject(RatingService);
   private _filmService: FilmService = inject(FilmService);
 
-  protected selectedFilm: Film | null = null;
-  protected ratings: Rating = {};
-  protected films: Film[] = [];
+  protected films: WritableSignal<Film[]> = signal([]);
+  protected ratings: Signal<Rating | undefined> = toSignal(this._ratingService.ratings$.pipe(startWith({})));
+  protected selectedFilm: WritableSignal<Film | null> = signal(null);
+
+  protected avgRating: Signal<number | undefined> = computed(() => {
+    const ratings = this.ratings() ?? {};
+    return Object.values(ratings).reduce((acc, rating) => acc + rating, 0) / Object.keys(ratings).length;
+  });
 
   constructor() {
     super();
-    this._ratingService.ratings$.pipe(
-      takeUntilDestroyed()
-    ).subscribe((ratings) => {
-      this.ratings = ratings;
-      this.applyRatings();
+    effect(() => {
+      if (!this.selectedFilm()) {
+        return;
+      }
+      this._logService.log('View Details for ' + this.selectedFilm()?.title);
     });
   }
 
   public loadFilms(): void {
     this._filmService.getFilms().subscribe((films: Film[]) => {
-      this.films = films;
-      this.applyRatings();
-    });
-  }
-
-  public applyRatings() {
-    this.films = this.films.map((film) => {
-      return {
-        ...film,
-        rating: this.ratings[film.url]
-      }
+      this.films.set(films);
     });
   }
 
   public updateRating($event: any): void {
-    this._ratingService.updateRating(this.selectedFilm?.url as string, $event);
+    this._ratingService.updateRating(this.selectedFilm()?.url as string, $event);
   }
 
   public setSelectedFilm($event: Film | null): void {
-    this.selectedFilm = $event;
-    this._logService.log('View Details for ' + $event?.title);
+    this.selectedFilm.set($event);
   }
 }
 

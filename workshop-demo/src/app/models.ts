@@ -1,3 +1,5 @@
+import {WritableSignal} from '@angular/core';
+
 export interface ArrayResponse<T> {
   count: number;
   results: T[];
@@ -6,7 +8,7 @@ export interface ArrayResponse<T> {
 export interface Film {
   title: string;
   url: string;
-  rating?: number;
+  rating?: WritableSignal<number | undefined>;
 }
 
 export interface Rating {
